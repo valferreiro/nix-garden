@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import PlantCard from './components/PlantCard'
 
 type Habit = {
   id: number
@@ -144,34 +145,13 @@ const getPlant = (streak: number) => {
               const plant = getPlant(habit.streak)
 
               return (
-                  <div className={`plant-card ${habit.completed ? 'completed' : ''}`}>
-
-                    <button 
-                      type="button"
-                      className="plant-action"
-                      onClick={() => toggleHabit(habit.id)}
-                      > 
-
-                      <span className={`plant ${plant.stage}`}>
-                        {plant.emoji}
-                      </span>
-                  </button>
-                  
-                  <span className="plant-name">{habit.name}</span>
-                  <span className="plant-streak">
-                    {habit.streak === 0
-                      ? 'Nueva semilla'
-                      : `${habit.streak} ${habit.streak === 1 ? 'día' : 'días'}`}
-                  </span>
-
-                  <button 
-                      type="button"
-                      className="delete-button"
-                      onClick={() => deleteHabit(habit.id)}
-                      > Eliminar 
-                  </button>
-
-                </div>
+                  <PlantCard
+                      key={habit.id}
+                      habit={habit}
+                      plant={plant}
+                      onToggle={toggleHabit}
+                      onDelete={deleteHabit}
+                    />
               )
             })}
           </div>
