@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 type Habit = {
@@ -9,8 +9,24 @@ type Habit = {
 }
 
 function App() {
-  const [habits, setHabits] = useState<Habit[]>([])
+  const [habits, setHabits] = useState<Habit[]>(() => {
+  const savedHabits = localStorage.getItem("nix-garden-items")
+
+  if (!savedHabits) {
+    return []
+  }
+
+  return JSON.parse(savedHabits)
+})
+
   const [habitName, setHabitName] = useState('')
+
+  useEffect(() => {
+    localStorage.setItem(
+      "nix-garden-items",
+      JSON.stringify(habits)
+    )
+  }, [habits])
 
   const toggleHabit = (habitId: number) => {
   setHabits((currentHabits) =>
