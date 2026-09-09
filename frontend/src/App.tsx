@@ -28,6 +28,11 @@ function App() {
   )
 }
 
+const deleteHabit = (habitId: number) => {
+  setHabits((currentHabits) =>
+  currentHabits.filter((habit) => habit.id !== habitId))
+}
+
 const completeHabits = habits.filter(
   (habit) => habit.completed
 ).length
@@ -55,18 +60,30 @@ const getGardenMessage = () => {
 
 const getPlant = (streak: number) => {
   if (streak >= 7) {
-    return '✨'
+    return {
+      emoji: "✨",
+      stage: "flower",
+    }
   }
 
   if (streak >= 3) {
-    return '🌷'
+    return {
+      emoji: "🌷",
+      stage: "bloom",
+    }
   }
 
   if (streak >= 1) {
-    return '🌿'
+    return {
+      emoji: "🌿",
+      stage: "sprout",
+    }
   }
 
-  return '🌱'
+  return {
+    emoji: "🌱",
+    stage: "seed",
+  }
 }
 
   return (
@@ -107,25 +124,40 @@ const getPlant = (streak: number) => {
           </p>
         ) : (
           <div className="plants">
-            {habits.map((habit) => (
-              <button
-                key={habit.id}
-                type="button"
-                className={`plant-card ${habit.completed ? 'completed' : ''}`}
-                onClick={() => toggleHabit(habit.id)}
-              >
-                <span className="plant">
-                  {getPlant(habit.streak)}
-                </span>
+            {habits.map((habit) => {
+              const plant = getPlant(habit.streak)
 
-                <span className="plant-name">{habit.name}</span>
-                <span className="plant-streak">
-                  {habit.streak === 0
-                    ? 'Nueva semilla'
-                    : `${habit.streak} ${habit.streak === 1 ? 'día' : 'días'}`}
-                </span>
-              </button>
-            ))}
+              return (
+                  <div className={`plant-card ${habit.completed ? 'completed' : ''}`}>
+
+                    <button 
+                      type="button"
+                      className="plant-action"
+                      onClick={() => toggleHabit(habit.id)}
+                      > 
+
+                      <span className={`plant ${plant.stage}`}>
+                        {plant.emoji}
+                      </span>
+                  </button>
+                  
+                  <span className="plant-name">{habit.name}</span>
+                  <span className="plant-streak">
+                    {habit.streak === 0
+                      ? 'Nueva semilla'
+                      : `${habit.streak} ${habit.streak === 1 ? 'día' : 'días'}`}
+                  </span>
+
+                  <button 
+                      type="button"
+                      className="delete-button"
+                      onClick={() => deleteHabit(habit.id)}
+                      > Eliminar 
+                  </button>
+
+                </div>
+              )
+            })}
           </div>
         )}
       </section>
