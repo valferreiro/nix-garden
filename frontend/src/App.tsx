@@ -1,122 +1,149 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import PlantCard from './components/PlantCard'
+import { calculateStreak } from './utils/streak'
 
 type Habit = {
   id: number
   name: string
-  completed: boolean
-  streak: number
+  completions: string[]
 }
 
-function App() {
-  const [habits, setHabits] = useState<Habit[]>(() => {
-  const savedHabits = localStorage.getItem("nix-garden-items")
+const getToday = () => {
+  const today = new Date()
 
-  if (!savedHabits) {
-    return []
-  }
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, '0')
+  const day = String(today.getDate()).padStart(2, '0')
 
-  return JSON.parse(savedHabits)
-})
-
-  const [habitName, setHabitName] = useState('')
-
-  useEffect(() => {
-    localStorage.setItem(
-      "nix-garden-items",
-      JSON.stringify(habits)
-    )
-  }, [habits])
-
-  const toggleHabit = (habitId: number) => {
-  setHabits((currentHabits) =>
-    currentHabits.map((habit) =>
-      habit.id === habitId
-        ? {
-            ...habit,
-            completed: !habit.completed,
-            streak: habit.completed
-              ? Math.max(0, habit.streak - 1)
-              : habit.streak + 1,
-          }
-        : habit,
-    ),
-  )
-}
-
-const deleteHabit = (habitId: number) => {
-  setHabits((currentHabits) =>
-  currentHabits.filter((habit) => habit.id !== habitId))
-}
-
-const completeHabits = habits.filter(
-  (habit) => habit.completed
-).length
-
-const progress = 
-  habits.length === 0
-  ? 0
-  : (completeHabits / habits.length) * 100
-
-const getGardenMessage = () => {
-  if (habits.length === 0) {
-    return "¡Planta tu primera semilla! 🌱"
-  }
-  
-  if (completeHabits === habits.length) {
-    return "¡Tu jardín está floreciendo! 🌷✨"
-  }
-
-  if (completeHabits > 0) {
-    return "¡Sigue cultivando! 🪴"
-  }
-
-  return "Las plantas esperan un poco de tu cariño 🧚🏻‍♀️"
+  return `${year}-${month}-${day}`
 }
 
 const getPlant = (streak: number) => {
   if (streak >= 7) {
     return {
-      emoji: "✨",
-      stage: "flower",
+      emoji: '✨',
+      stage: 'flower',
     }
   }
 
   if (streak >= 3) {
     return {
-      emoji: "🌷",
-      stage: "bloom",
+      emoji: '🌷',
+      stage: 'bloom',
     }
   }
 
   if (streak >= 1) {
     return {
-      emoji: "🌿",
-      stage: "sprout",
+      emoji: '🌿',
+      stage: 'sprout',
     }
   }
 
   return {
-    emoji: "🌱",
-    stage: "seed",
+    emoji: '🌱',
+    stage: 'seed',
   }
 }
+
+function App() {
+  const [habits, setHabits] = useState<Habit[]>(() => {
+    const savedHabits = localStorage.getItem('nix-garden-items')
+
+    if (!savedHabits) {
+      return []
+    } 
+    
+    const parsedHabits = JSON.parse(savedHabits)
+
+    return parsedHabits.map((habit: Habit & {
+      completed?: boolean
+      streak?: number
+    }) => ({
+      id: habit.id,
+      name: habit.name,
+      completions: habit.completions ?? [],
+    }))
+  })  
+
+  const [habitName, setHabitName] = useState('')
+
+  useEffect(() => {
+    localStorage.setItem(
+      'nix-garden-items',
+      JSON.stringify(habits),
+    )
+  }, [habits])
+
+  const today = getToday()
+
+  const toggleHabit = (habitId: number) => {
+    setHabits((currentHabits) =>
+      currentHabits.map((habit) => {
+        if (habit.id !== habitId) {
+          return habit
+        }
+
+        const completedToday = habit.completions.includes(today)
+
+        return {
+          ...habit,
+          completions: completedToday
+            ? habit.completions.filter((date) => date !== today)
+            : [...habit.completions, today],
+        }
+      }),
+    )
+  }
+
+  const deleteHabit = (habitId: number) => {
+    setHabits((currentHabits) =>
+      currentHabits.filter((habit) => habit.id !== habitId),
+    )
+  }
+
+  const completeHabits = habits.filter(
+    (habit) => habit.completions.includes(today),
+  ).length
+
+  const progress =
+    habits.length === 0
+      ? 0
+      : (completeHabits / habits.length) * 100
+
+  const getGardenMessage = () => {
+    if (habits.length === 0) {
+      return '¡Planta tu primera semilla! 🌱'
+    }
+
+    if (completeHabits === habits.length) {
+      return '¡Tu jardín está floreciendo! 🌷✨'
+    }
+
+    if (completeHabits > 0) {
+      return '¡Sigue cultivando! 🪴'
+    }
+
+    return 'Las plantas esperan un poco de tu cariño 🧚🏻‍♀️'
+  }
 
   return (
     <main className="garden">
       <header className="garden-header">
-        <p className="garden-kicker">A little garden for your habits</p>
+        <p className="garden-kicker">
+          A little garden for your habits
+        </p>
 
         <h1>Nix Garden</h1>
 
         <p className="garden-description">
-          
+          Cultiva pequeños hábitos y observa cómo crece tu jardín.
         </p>
       </header>
 
-      <div className='"garden-progress'> 
-        <p>Tu jardín el día hoy :)</p>
+      <div className="garden-progress">
+        <p>Tu jardín el día de hoy :)</p>
 
         <strong>
           {completeHabits} / {habits.length} hábitos
@@ -134,7 +161,10 @@ const getPlant = (streak: number) => {
         />
       </div>
 
-      <section className="garden-space" aria-label="Tu jardín">
+      <section
+        className="garden-space"
+        aria-label="Tu jardín"
+      >
         {habits.length === 0 ? (
           <p className="empty-garden">
             ¡Tu jardín está esperando su primera semilla! 🌱
@@ -142,16 +172,18 @@ const getPlant = (streak: number) => {
         ) : (
           <div className="plants">
             {habits.map((habit) => {
-              const plant = getPlant(habit.streak)
+              const streak = calculateStreak(habit.completions)
+              const plant = getPlant(streak)
 
               return (
-                  <PlantCard
-                      key={habit.id}
-                      habit={habit}
-                      plant={plant}
-                      onToggle={toggleHabit}
-                      onDelete={deleteHabit}
-                    />
+                <PlantCard
+                  key={habit.id}
+                  habit={habit}
+                  plant={plant}
+                  streak={streak}
+                  onToggle={toggleHabit}
+                  onDelete={deleteHabit}
+                />
               )
             })}
           </div>
@@ -159,8 +191,8 @@ const getPlant = (streak: number) => {
       </section>
 
       <form
-        className='habit-form'
-        onSubmit = {(event) => {
+        className="habit-form"
+        onSubmit={(event) => {
           event.preventDefault()
 
           if (!habitName.trim()) {
@@ -172,25 +204,27 @@ const getPlant = (streak: number) => {
             {
               id: Date.now(),
               name: habitName.trim(),
-              completed: false,
-              streak: 0
+              completions: [],
             },
           ])
 
           setHabitName('')
         }}
-        >
-          <input
-            type="text"
-            value={habitName}
-            onChange={(event) => setHabitName(event.target.value)}
-            placeholder="¿Qué hábito quieres cultivar hoy?"
-            aria-label="Nombre del hábito"
-          />
+      >
+        <input
+          type="text"
+          value={habitName}
+          onChange={(event) => setHabitName(event.target.value)}
+          placeholder="¿Qué hábito quieres cultivar hoy?"
+          aria-label="Nombre del hábito"
+        />
 
-          <button type="submit" className="plant-button">
-            Plantar 🌱
-          </button>
+        <button
+          type="submit"
+          className="plant-button"
+        >
+          Plantar 🌱
+        </button>
       </form>
     </main>
   )
