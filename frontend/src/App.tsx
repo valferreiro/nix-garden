@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import PlantCard from './components/PlantCard'
 import Nix from './components/Nix'
+import GardenStatus from './components/GardenStatus'
 import { calculateStreak, getToday } from './utils/streak'
 import { getGardenStage } from './utils/garden'
 import { getNixStage }  from './utils/nix'
@@ -157,16 +158,7 @@ function App() {
         />
       </div>
 
-      <div className="garden-status">
-        <span className="garden-status-emoji">
-          {garden.emoji}
-        </span>
-
-        <div>
-          <h2>{garden.name}</h2>
-          <p>{garden.message}</p>
-        </div>
-      </div>
+      <GardenStatus garden={garden}/>
 
       <Nix nix={nix} />
 

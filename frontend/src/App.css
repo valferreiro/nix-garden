@@ -389,3 +389,145 @@
     transform: scale(1);
   }
 }
+
+.garden-status {
+  width: min(500px, 100%);
+  margin-top: 24px;
+  padding: 20px 24px;
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  border: 1px solid var(--border);
+  border-radius: 20px;
+
+  background: var(--garden-bg);
+
+  text-align: left;
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.garden-status:hover {
+  transform: translateY(-2px);
+}
+
+.garden-status-emoji {
+  font-size: 40px;
+  flex-shrink: 0;
+}
+
+.garden-status h2 {
+  margin: 0;
+
+  color: var(--text-h);
+
+  font-size: 18px;
+}
+
+.garden-status p {
+  margin: 6px 0 0;
+
+  color: var(--text);
+
+  font-size: 14px;
+}
+
+.garden-status.seed {
+  border-color: rgba(121, 174, 111, 0.25);
+}
+
+.garden-status.sprout {
+  border-color: rgba(121, 174, 111, 0.45);
+}
+
+.garden-status.growing {
+  border-color: rgba(121, 174, 111, 0.6);
+}
+
+.garden-status.blooming {
+  border-color: rgba(121, 174, 111, 0.75);
+}
+
+.garden-status.magical {
+  border-color: var(--accent);
+}
+
+.garden-status.seed {
+  animation: garden-seed 3s ease-in-out infinite;
+}
+
+.garden-status.sprout {
+  animation: garden-sprout 2.8s ease-in-out infinite;
+}
+
+.garden-status.growing {
+  animation: garden-growing 2.6s ease-in-out infinite;
+}
+
+.garden-status.blooming {
+  animation: garden-blooming 2.4s ease-in-out infinite;
+}
+
+.garden-status.magical {
+  animation: garden-magical 2.2s ease-in-out infinite;
+}
+
+@keyframes garden-seed {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes garden-sprout {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes garden-growing {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes garden-blooming {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes garden-magical {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
