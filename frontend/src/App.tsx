@@ -1,22 +1,15 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import PlantCard from './components/PlantCard'
-import { calculateStreak } from './utils/streak'
+import Nix from './components/Nix'
+import { calculateStreak, getToday } from './utils/streak'
+import { getGardenStage } from './utils/garden'
+import { getNixStage }  from './utils/nix'
 
 type Habit = {
   id: number
   name: string
   completions: string[]
-}
-
-const getToday = () => {
-  const today = new Date()
-
-  const year = today.getFullYear()
-  const month = String(today.getMonth() + 1).padStart(2, '0')
-  const day = String(today.getDate()).padStart(2, '0')
-
-  return `${year}-${month}-${day}`
 }
 
 const getPlant = (streak: number) => {
@@ -112,6 +105,9 @@ function App() {
       ? 0
       : (completeHabits / habits.length) * 100
 
+  const garden = getGardenStage(progress)
+  const nix = getNixStage(progress)
+
   const getGardenMessage = () => {
     if (habits.length === 0) {
       return '¡Planta tu primera semilla! 🌱'
@@ -160,6 +156,19 @@ function App() {
           style={{ width: `${progress}%` }}
         />
       </div>
+
+      <div className="garden-status">
+        <span className="garden-status-emoji">
+          {garden.emoji}
+        </span>
+
+        <div>
+          <h2>{garden.name}</h2>
+          <p>{garden.message}</p>
+        </div>
+      </div>
+
+      <Nix nix={nix} />
 
       <section
         className="garden-space"

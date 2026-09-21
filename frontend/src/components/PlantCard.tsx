@@ -1,5 +1,6 @@
 import { useState } from 'react'
-
+import { getToday } from '../utils/streak'
+ 
 type Habit = {
   id: number
   name: string
@@ -28,13 +29,7 @@ function PlantCard({
 }: PlantCardProps) {
   const [isGrowing, setIsGrowing] = useState(false)
 
-  const today = new Date()
-
-  const year = today.getFullYear()
-  const month = String(today.getMonth() + 1).padStart(2, '0')
-  const day = String(today.getDate()).padStart(2, '0')
-
-  const todayString = `${year}-${month}-${day}`
+  const todayString = getToday()
 
   const completedToday = habit.completions.includes(todayString)
 
