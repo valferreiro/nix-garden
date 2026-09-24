@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import PlantCard from './components/PlantCard'
 import Nix from './components/Nix'
+import Dashboard from './components/dashboard'
 import GardenStatus from './components/GardenStatus'
 import { calculateStreak, getToday } from './utils/streak'
 import { getGardenStage } from './utils/garden'
 import { getNixStage }  from './utils/nix'
+import { getDashboardStats } from './utils/dashboard'
 
 type Habit = {
   id: number
@@ -97,14 +99,10 @@ function App() {
     )
   }
 
-  const completeHabits = habits.filter(
-    (habit) => habit.completions.includes(today),
-  ).length
+  const stats = getDashboardStats(habits)
 
-  const progress =
-    habits.length === 0
-      ? 0
-      : (completeHabits / habits.length) * 100
+  const completeHabits = stats.completedToday
+  const progress = stats.progress
 
   const garden = getGardenStage(progress)
   const nix = getNixStage(progress)
@@ -159,6 +157,8 @@ function App() {
       </div>
 
       <GardenStatus garden={garden}/>
+
+      <Dashboard stats={stats} />
 
       <Nix nix={nix} />
 

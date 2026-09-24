@@ -531,3 +531,48 @@
     transform: translateY(-5px);
   }
 }
+
+.dashboard {
+  width: min(500px, 100%);
+  margin-top: 24px;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.dashboard-card {
+  padding: 18px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  background: var(--garden-bg);
+
+  text-align: left;
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.dashboard-label {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.dashboard-value {
+  color: var(--text-h);
+  font-size: 24px;
+  line-height: 1;
+}
