@@ -1,23 +1,21 @@
 import type { DashboardStats } from '../utils/dashboard'
 
-type DashboradPropos = {
-    stats: DashboardStats   
+type DashboardProps = {
+    stats: DashboardStats
 }
 
-function Dashboard({ stats }: DashboradPropos) {
+function Dashboard({ stats }: DashboardProps) {
     return (
-        <section 
+        <section
             className="dashboard"
-            arial-label="Resumen de tu Progreso"
-        >
+            aria-label="Resumen de tu progreso">
 
             <div className="dashboard-card">
                 <span className="dashboard-label">
-                    Hábitos
+                    Hoy
                 </span>
-
                 <strong className="dashboard-value">
-                    {stats.totalHabits}
+                    {stats.completedToday}/{stats.totalHabits}
                 </strong>
             </div>
 
@@ -25,24 +23,22 @@ function Dashboard({ stats }: DashboradPropos) {
                 <span className="dashboard-label">
                     Progreso
                 </span>
-
                 <strong className="dashboard-value">
-                    {Math.round(stats.progress)}%
+                    {stats.progress}%
                 </strong>
             </div>
 
             <div className="dashboard-card">
                 <span className="dashboard-label">
-                    Racha Actual
+                    Mejor racha
                 </span>
-
                 <strong className="dashboard-value">
                     {stats.bestStreak}
                     {stats.bestStreak === 1 ? ' día ' : ' días'}
                 </strong>
             </div>
-        </section> 
+        </section>
     )
-} 
+}
 
-export default Dashboard
+export default Dashboard 

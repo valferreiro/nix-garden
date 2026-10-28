@@ -27,7 +27,7 @@ export const getDashboardStats = (
   const progress =
     totalHabits === 0
       ? 0
-      : (completedToday / totalHabits) * 100
+      : Math.round((completedToday / totalHabits) * 100)
 
   const bestStreak =
     habits.length === 0

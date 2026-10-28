@@ -13,7 +13,7 @@ export const getGardenStage = (
             name: "¡Jardín Mágico!",
             emoji: "✨",
             message: "Tu jardín está lleno de magia",
-            stage: "magical!",
+            stage: "magical",
         }    
     }
 
@@ -22,7 +22,7 @@ export const getGardenStage = (
             name: "¡Jardín Floreciendo!",
             emoji: "🌷",
             message: "Tu jardín está empezando a florecer, sigue cultivando tus hábitos!",
-            stage: "blooming!",
+            stage: "blooming",
         }
     }
 

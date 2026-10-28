@@ -9,7 +9,7 @@ export const getNixStage = (
 ): NixStage => {
     if (progress >= 76) {
         return {
-            name: "Guardían del Jardín",
+            name: "Guardián del Jardín",
             message: "¡Nix está cuidando de tu jardín!",
             emoji: "🐰",
         }
@@ -17,7 +17,7 @@ export const getNixStage = (
 
     if (progress >= 51) {
         return {
-            name: "Protecctor del Jardín",
+            name: "Protector del Jardín",
             message: "¡Nix empieza a cuidar de tus plantas!",
             emoji: "🐰",
         }
